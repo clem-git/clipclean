@@ -1,0 +1,5 @@
+10 + import { something } from "module";
+11 - const old = value;
+12 + const new = updated;
+13 unchanged line that wraps to next line
+14 + added line

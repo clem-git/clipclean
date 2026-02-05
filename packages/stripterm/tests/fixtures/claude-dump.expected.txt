@@ -1,0 +1,11 @@
+Here is a response from Claude that has been wrapped across multiple lines because the terminal window was too narrow.
+
+• First bullet point with some extra text that wraps
+• Second bullet point
+
+1. Numbered item one that also wraps to next line
+2. Numbered item two
+
+This is a paragraph that continues on the next line with lowercase text that should be joined.
+
+Another paragraph starts here with an Uppercase letter.
