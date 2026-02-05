@@ -23,24 +23,50 @@ class AppState: ObservableObject {
         flashSuccess(detectedType)
     }
 
-    /// Simulate Cmd+C, then clean the clipboard
+    /// Wait for modifier keys to be released, simulate Cmd+C, wait for clipboard to update, then clean
     func copyAndClean() {
-        simulateKeyCombo(key: CGKeyCode(kVK_ANSI_C), flags: .maskCommand)
-        // Small delay to let the clipboard update from the copy
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
-            self?.cleanClipboard()
+        let prevCount = NSPasteboard.general.changeCount
+        waitForModifierRelease { [weak self] in
+            self?.simulateKeyCombo(key: CGKeyCode(kVK_ANSI_C), flags: .maskCommand)
+            self?.waitForClipboardChange(from: prevCount, attempts: 0)
         }
     }
 
-    /// Clean clipboard then simulate Cmd+V to paste into frontmost app
+    /// Clean clipboard, wait for modifier release, then simulate Cmd+V
     func cleanAndPaste() {
         guard let detectedType = cleaner.clean() else { return }
         flashSuccess(detectedType)
-        simulateKeyCombo(key: CGKeyCode(kVK_ANSI_V), flags: .maskCommand)
+        waitForModifierRelease { [weak self] in
+            self?.simulateKeyCombo(key: CGKeyCode(kVK_ANSI_V), flags: .maskCommand)
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func waitForModifierRelease(then action: @escaping () -> Void) {
+        let flags = CGEventSource.flagsState(.hidSystemState)
+        let held: CGEventFlags = [.maskShift, .maskAlternate, .maskCommand, .maskControl]
+        if flags.intersection(held).isEmpty {
+            action()
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+                self?.waitForModifierRelease(then: action)
+            }
+        }
+    }
+
+    private func waitForClipboardChange(from prevCount: Int, attempts: Int) {
+        if NSPasteboard.general.changeCount != prevCount {
+            cleanClipboard()
+        } else if attempts < 20 { // max ~1s
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+                self?.waitForClipboardChange(from: prevCount, attempts: attempts + 1)
+            }
+        }
     }
 
     private func simulateKeyCombo(key: CGKeyCode, flags: CGEventFlags) {
-        let src = CGEventSource(stateID: .hidSystemState)
+        let src = CGEventSource(stateID: .privateState)
         let keyDown = CGEvent(keyboardEventSource: src, virtualKey: key, keyDown: true)
         keyDown?.flags = flags
         keyDown?.post(tap: .cghidEventTap)
