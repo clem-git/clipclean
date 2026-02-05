@@ -17,29 +17,51 @@ open packages/macos/build/Clipclean.app
 
 ## How it works
 
-Copy messy terminal output, press the shortcut, paste clean text.
+Copy messy terminal output, press the shortcut, paste clean text. No more box-drawing characters, no more lines broken mid-sentence, no more trailing whitespace padding every line.
 
 ### Before
 
+What you get when you copy from Claude Code or a narrow terminal — lines broken at the terminal width, `│` characters everywhere, and invisible trailing spaces padding every line:
+
 ```
-│ The key insight is that retrieval-augmented
-│ generation works by combining two distinct
-│ capabilities:
-│
-│ 1. A retrieval system that searches through
-│    a knowledge base to find relevant documents
-│ 2. A generation model that synthesizes the
-│    retrieved information into a coherent
-│    response
+│ Here's how the authentication flow works in       ·
+│ your codebase. When a user hits the /login        ·
+│ endpoint, the server validates credentials        ·
+│ against the database and generates a JWT          ·
+│ token with a 24-hour expiry.                      ·
+│                                                   ·
+│ The middleware in auth.ts then:                    ·
+│                                                   ·
+│ 1. Extracts the Bearer token from the             ·
+│    Authorization header                           ·
+│ 2. Verifies the signature using the               ·
+│    RS256 algorithm and your public key             ·
+│ 3. Checks the token hasn't expired and            ·
+│    attaches the decoded payload to                 ·
+│    req.user for downstream handlers               ·
+│                                                   ·
+│ The refresh token flow is separate — it           ·
+│ uses an HTTP-only cookie rather than the          ·
+│ Authorization header, which prevents XSS          ·
+│ attacks from accessing it. When the access        ·
+│ token expires, the client calls /refresh          ·
+│ and gets a new pair.                              ·
 ```
+
+<sub>(`·` = trailing spaces that are invisible but mess up your docs when you paste)</sub>
 
 ### After
 
 ```
-The key insight is that retrieval-augmented generation works by combining two distinct capabilities:
+Here's how the authentication flow works in your codebase. When a user hits the /login endpoint, the server validates credentials against the database and generates a JWT token with a 24-hour expiry.
 
-1. A retrieval system that searches through a knowledge base to find relevant documents
-2. A generation model that synthesizes the retrieved information into a coherent response
+The middleware in auth.ts then:
+
+1. Extracts the Bearer token from the Authorization header
+2. Verifies the signature using the RS256 algorithm and your public key
+3. Checks the token hasn't expired and attaches the decoded payload to req.user for downstream handlers
+
+The refresh token flow is separate — it uses an HTTP-only cookie rather than the Authorization header, which prevents XSS attacks from accessing it. When the access token expires, the client calls /refresh and gets a new pair.
 ```
 
 ## Shortcuts
