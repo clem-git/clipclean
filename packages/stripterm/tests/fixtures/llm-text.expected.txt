@@ -1,0 +1,6 @@
+Here is some LLM output that was wrapped at a narrow terminal width, making it hard to read.
+
+- Bullet one with some wrapped text
+- Bullet two
+
+The conclusion is that this text needs to be cleaned up for better readability.

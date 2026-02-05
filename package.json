@@ -1,0 +1,12 @@
+{
+  "name": "clipclean-monorepo",
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "dev": "pnpm -r dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "name": "clipclean",
+  "displayName": "Clipclean",
+  "description": "Clean Claude Code / Codex terminal output",
+  "version": "1.0.0",
+  "publisher": "clipclean",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "clipclean.copyClean",
+        "title": "Clipclean: Copy Clean"
+      },
+      {
+        "command": "clipclean.pasteClean",
+        "title": "Clipclean: Paste Clean"
+      },
+      {
+        "command": "clipclean.cleanClipboard",
+        "title": "Clipclean: Clean Clipboard"
+      },
+      {
+        "command": "clipclean.cleanSelection",
+        "title": "Clipclean: Clean Selection"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "clipclean.copyClean",
+        "key": "ctrl+shift+alt+c",
+        "mac": "cmd+shift+alt+c"
+      },
+      {
+        "command": "clipclean.pasteClean",
+        "key": "ctrl+shift+alt+v",
+        "mac": "cmd+shift+alt+v"
+      },
+      {
+        "command": "clipclean.cleanClipboard",
+        "key": "ctrl+shift+alt+x",
+        "mac": "cmd+shift+alt+x"
+      },
+      {
+        "command": "clipclean.cleanSelection",
+        "key": "ctrl+shift+alt+s",
+        "mac": "cmd+shift+alt+s"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "dev": "node esbuild.mjs --watch",
+    "package": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.2.0",
+    "esbuild": "^0.24.0",
+    "clipclean": "workspace:*"
+  }
+}
